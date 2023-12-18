@@ -9,6 +9,14 @@ const GlobalStyle = createGlobalStyle`
     font-family: Open-Sans, Helvetica, Sans-Serif;
   }
 
+
+
+  p,h1,h2,h3,h4,h5,h6,span,ul,a{
+    list-style:none;
+    padding:0;
+    margin:0;
+    text-decoration:none;
+  }
   
 `
 
