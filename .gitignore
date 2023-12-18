@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 music-service-front.tar
+key.js
 
 # Editor directories and files
 .vscode/*
