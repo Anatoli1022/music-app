@@ -111,56 +111,59 @@ const MainPlayer = styled.div`
   align-items: center;
 `
 
-const InputVolume = styled.input``
-// cursor: pointer;
-// border-radius: 20px;
-// -webkit-appearance: none;
-// appearance: none;
-// background-color: #464646;
-// height: 5px;
+const InputVolume = styled.input`
+  cursor: pointer;
+  border-radius: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #464646;
+  height: 5px;
 
-// &::-webkit-slider-thumb {
-//   -webkit-appearance: none;
-//   appearance: none;
-//   background-color: #7209b7;
-//   width: 12px;
-//   height: 12px;
-//   margin-top: -3px;
-//   border-radius: 20px;
-// }
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #7209b7;
+    width: 12px;
+    height: 12px;
+    margin-top: -3px;
+    border-radius: 20px;
+  }
 
-// &::-webkit-slider-runnable-track {
-//   background: ${(props) =>
-//     `linear-gradient( #B5179E 0%, #7209B7 ${props.value}%,  #B5179E ${props.value}%,#B5179E 0%);`};
+  &::-webkit-slider-runnable-track {
+    background: ${(props) =>
+      `linear-gradient( #B5179E 0%, #7209B7 ${props.value * 100}%,  #B5179E ${props.value * 100}%,#B5179E 0%);`};
 
-//   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-//   border-radius: 10px;
-//   height: 5px;
-// }
-const InputCurrent = styled.input``
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    height: 5px;
+  }
+`
 
-// cursor: pointer;
-// border-radius: 20px;
-// -webkit-appearance: none;
-// appearance: none;
-// background-color: #464646;
-// height: 5px;
-// width: 400px;
-// &::-webkit-slider-thumb {
-//   -webkit-appearance: none;
-//   appearance: none;
-//   background-color: #7209b7;
-//   width: 12px;
-//   height: 12px;
-//   margin-top: -3px;
-//   border-radius: 20px;
-// }
+const InputCurrent = styled.input`
+  cursor: pointer;
+  border-radius: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #464646;
+  height: 5px;
+  width: 400px;
 
-// &::-webkit-slider-runnable-track {
-//   background: ${(props) =>
-//     `linear-gradient(to right, #B5179E 0%, #7209B7 ${props.value}%,  #B5179E ${props.value}%,#464646  0%);`};
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #7209b7;
+    width: 12px;
+    height: 12px;
+    margin-top: -3px;
+    border-radius: 20px;
+  }
 
-//   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
-//   border-radius: 10px;
-//   height: 5px;
-// }
+  &::-webkit-slider-runnable-track {
+    background: ${(props) =>
+      `linear-gradient(to right, #B5179E 0%, #7209B7 ${props.value}%,  #B5179E ${props.value}%,#464646  0%);`};
+
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    height: 5px;
+  }
+`
