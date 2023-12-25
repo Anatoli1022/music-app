@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
      min-height: 100vh;
     background:#111111;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
+    font-family: 'Inter', sans-serif;
   }
 
 
