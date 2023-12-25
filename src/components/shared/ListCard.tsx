@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import PlayPause from './PlayPause'
 
-const ListCard: React.FC = ({ item, i, data }) => {
+const ListCard: React.FC = ({ item, i }) => {
   const { title, images } = item
   const activeTrack = useSelector((state) => state.player.activeSong)
   const active = useSelector((state) => state.player.isPlaying)
@@ -28,14 +28,21 @@ const ListCard: React.FC = ({ item, i, data }) => {
 export default ListCard
 
 const Item = styled.li<{ isActive: boolean }>`
-  color: ${({ isActive }) => (isActive ? '#7209B7' : '#b8b8b8;')};
+  color: #b8b8b8;
   background: rgba(35, 35, 35, 0.3);
+  box-shadow: ${({ isActive }) => (isActive ? '6px 4px 100px 0px rgba(0, 0, 0, 0.4)' : 'none')};
+  background-image: ${({ isActive }) =>
+    isActive ? 'linear-gradient(94deg, #b5179e -13.04%, #7209b7 124.22%)' : 'none'};
+  background-clip: ${({ isActive }) => (isActive ? 'text' : 'none')};
+  -webkit-background-clip: ${({ isActive }) => (isActive ? 'text' : 'none')};
+  -webkit-text-fill-color: ${({ isActive }) => (isActive ? ' transparent' : 'none')};
   display: flex;
   align-items: center;
   transition: 0.3s;
   justify-content: space-between;
   padding: 12px 17px 12px 17px;
 `
+
 const TrackInfoContainer = styled.div`
   display: flex;
   align-items: center;
