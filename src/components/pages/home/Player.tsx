@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import PlayPause from '../../shared/PlayPause'
-import { playPause } from '../../../redux/features/playerSlice'
 import { useDispatch } from 'react-redux'
+import { playPause, nextSong, prevSong } from '../../../redux/features/playerSlice'
 interface PlayerState {
   isPlaying: boolean
 }
@@ -26,9 +26,9 @@ const Player: React.FC = () => {
   useEffect(() => {
     if (isMounted.current) {
       if (active) {
-        pause()
-      } else {
         play()
+      } else {
+        pause()
       }
     } else {
       isMounted.current = true
@@ -48,7 +48,7 @@ const Player: React.FC = () => {
       console.log('Песня завершена')
       setCurrentTime(0)
       dispatch(playPause(false))
-      // Выполните дополнительные действия, когда песня завершена
+      playNextSong()
     }
 
     if (audioRef.current) {
@@ -66,9 +66,34 @@ const Player: React.FC = () => {
     }
   }, [active])
 
-  const play = () => audioRef.current.pause()
-  const pause = () => audioRef.current.play()
+  const play = () => {
+    if (audioRef.current) {
+      audioRef.current.play()
+    }
+  }
+  const pause = () => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+    }
+  }
   const setVolume = (value) => (audioRef.current.volume = value)
+
+  const playNextSong = () => {
+    const newIndex = song.currentIndex + 1
+
+    pause()
+    dispatch(nextSong(newIndex))
+    play()
+  }
+
+  const playPrevSong = () => {
+    pause()
+    const newIndex = song.currentIndex - 1
+    if (newIndex > 0 || newIndex === 0) {
+      dispatch(prevSong(newIndex))
+    }
+    play()
+  }
 
   const handleSeekChange = (e) => {
     const newTime = Number(e.target.value)
@@ -79,8 +104,9 @@ const Player: React.FC = () => {
   return (
     <MainPlayer>
       {isMounted.current && <PlayPause />}
-
-      {song.currentIndex && <audio ref={audioRef} src={song.activeSong.hub.actions[1].uri}></audio>}
+      <button onClick={playPrevSong}>Предыдущая</button>
+      <button onClick={playNextSong}>Следующая</button>
+      {song.currentIndex && <audio ref={audioRef} src={activeSong.hub.actions[1].uri}></audio>}
       <InputCurrent
         type='range'
         min='0'

@@ -4,23 +4,22 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import PlayPause from './PlayPause'
 
-const ListCard: React.FC = ({ item, i }) => {
-  const { title, images } = item
-  const activeTrack = useSelector((state) => state.player.activeSong)
-  const active = useSelector((state) => state.player.isPlaying)
 
-  console.log(active)
-  console.log(activeTrack)
+
+const ListCard: React.FC<ListCardProps> = ({ item, i, data }) => {
+  const { title, images } = item
+  const activeSong = useSelector((state: RootState) => state.player.activeSong)
+  const active = useSelector((state: RootState) => state.player.isPlaying)
 
   return (
-    <Item isActive={activeTrack === item && active}>
+    <Item isActive={activeSong === item && active}>
       <TrackInfoContainer>
-        <TrackNumber>{i}</TrackNumber>
+        <TrackNumber>{i + 1}</TrackNumber>
         <TrackImage src={images.coverart} />
         <TrackTitle>{title}</TrackTitle>
       </TrackInfoContainer>
 
-      <PlayPause activeTrack={activeTrack} item={item} i={i} />
+      <PlayPause activeSong={activeSong} item={item} i={i} data={data} />
     </Item>
   )
 }
@@ -63,6 +62,5 @@ const TrackNumber = styled.span`
 `
 const TrackImage = styled.img`
   border-radius: 50%;
-  margin-right: 20px;
   max-width: 58px;
 `

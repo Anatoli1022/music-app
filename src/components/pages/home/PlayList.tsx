@@ -23,7 +23,7 @@ const PlayList: React.FC = () => {
           {
             console.log(item)
           }
-          return <ListCard item={item} i={i + 1} data={data} key={i} />
+          return <ListCard item={item} i={i} data={data} key={i} />
         })}
       </TrackList>
     </PlaylistPlayerContainer>

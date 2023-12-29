@@ -1,40 +1,34 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { playPause, setActiveSong } from '../../redux/features/playerSlice'
+import { playPause, setActiveSong, updateCurrentSongs } from '../../redux/features/playerSlice'
 import styled from 'styled-components'
 
-interface PlayPauseProps {
-  activeTrack: any
-  item: any
-  i: number
-}
-
-interface PlayerState {
-  isPlaying: boolean
-}
-
-const PlayPause: React.FC<PlayPauseProps> = ({ activeTrack, item, i }) => {
+const PlayPause: React.FC<PlayPauseProps> = ({ activeSong, item, i, data }) => {
   const dispatch = useDispatch()
   const active = useSelector((state: { player: PlayerState }) => state.player.isPlaying)
 
   const handlePlayPause = () => {
     if (active) {
       dispatch(playPause(false))
-      if (activeTrack !== item) {
+      if (activeSong !== item) {
         dispatch(setActiveSong({ song: item, i }))
         dispatch(playPause(true))
+
+        dispatch(updateCurrentSongs(data))
       }
     } else {
       dispatch(playPause(true))
-      if (activeTrack !== item) {
+      if (activeSong !== item) {
         dispatch(setActiveSong({ song: item, i }))
+
+        dispatch(updateCurrentSongs(data))
       }
     }
   }
 
   return (
     <TrackButton type='button' onClick={handlePlayPause}>
-      {activeTrack === item && active ? (
+      {activeSong === item && active ? (
         <svg xmlns='http://www.w3.org/2000/svg' width='18' height='22' viewBox='0 0 18 26' fill='none'>
           <rect width='5' height='26' rx='2.5' fill='url(#paint0_linear_9_59)' />
           <rect x='13' width='5' height='26' rx='2.5' fill='url(#paint1_linear_9_59)' />
