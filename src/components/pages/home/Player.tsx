@@ -4,14 +4,6 @@ import styled from 'styled-components'
 import PlayPause from '../../shared/PlayPause'
 import { useDispatch } from 'react-redux'
 import { playPause, nextSong, prevSong } from '../../../redux/features/playerSlice'
-interface PlayerState {
-  isPlaying: boolean
-}
-
-interface PlayerSong {
-  song: object
-  activeSong: object
-}
 
 const Player: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -20,7 +12,7 @@ const Player: React.FC = () => {
   const activeSong = useSelector((state: { player: PlayerSong }) => state.player.activeSong)
   const isMounted = useRef(false)
   const [currentTime, setCurrentTime] = useState(0)
-
+  const [currentVolume, setCurrentVolume] = useState(100)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -64,7 +56,7 @@ const Player: React.FC = () => {
         audioRef.current.removeEventListener('ended', handleEnded)
       }
     }
-  }, [active])
+  }, [activeSong])
 
   const play = () => {
     if (audioRef.current) {
@@ -76,7 +68,6 @@ const Player: React.FC = () => {
       audioRef.current.pause()
     }
   }
-  const setVolume = (value) => (audioRef.current.volume = value)
 
   const playNextSong = () => {
     const newIndex = song.currentIndex + 1
@@ -95,6 +86,14 @@ const Player: React.FC = () => {
     play()
   }
 
+  const setVolume = (e) => {
+    const newValue = Number(e.target.value)
+
+    setCurrentVolume(newValue)
+    audioRef.current.volume = newValue
+    console.log(currentVolume)
+  }
+
   const handleSeekChange = (e) => {
     const newTime = Number(e.target.value)
     setCurrentTime(newTime)
@@ -103,10 +102,15 @@ const Player: React.FC = () => {
 
   return (
     <MainPlayer>
+      <Button onClick={playPrevSong}>
+        <Triangle style={{ transform: 'rotate(-90deg)' }} />
+      </Button>
       {isMounted.current && <PlayPause />}
-      <button onClick={playPrevSong}>Предыдущая</button>
-      <button onClick={playNextSong}>Следующая</button>
-      {song.currentIndex && <audio ref={audioRef} src={activeSong.hub.actions[1].uri}></audio>}
+
+      <Button onClick={playNextSong}>
+        <Triangle style={{ transform: 'rotate(90deg)' }} />
+      </Button>
+      {activeSong && <audio ref={audioRef} src={activeSong.hub.actions[1].uri}></audio>}
       <InputCurrent
         type='range'
         min='0'
@@ -120,7 +124,8 @@ const Player: React.FC = () => {
         max='1'
         step='0.01'
         defaultValue='1'
-        onChange={(e) => setVolume(e.target.value)}
+        value={currentVolume}
+        onChange={setVolume}
       />
     </MainPlayer>
   )
@@ -137,6 +142,32 @@ const MainPlayer = styled.div`
   align-items: center;
 `
 
+const Button = styled.button`
+  padding-left: 20px;
+  padding-right: 20px;
+  cursor: pointer;
+`
+
+const Triangle = styled.div`
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  position: relative;
+  border-width: 0 11px 19px 11px;
+  border-radius: 2px;
+  border-color: transparent transparent rgb(184, 184, 184) transparent;
+  &::after {
+    content: '';
+    height: 22px;
+    width: 2px;
+    top: -10px;
+    right: 0;
+    position: absolute;
+    background: rgb(184, 184, 184);
+    transform: rotate(90deg);
+  }
+`
+
 const InputVolume = styled.input`
   cursor: pointer;
   border-radius: 20px;
@@ -144,7 +175,7 @@ const InputVolume = styled.input`
   appearance: none;
   background-color: #464646;
   height: 5px;
-
+  width: 100px;
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -157,7 +188,7 @@ const InputVolume = styled.input`
 
   &::-webkit-slider-runnable-track {
     background: ${(props) =>
-      `linear-gradient( #B5179E 0%, #7209B7 ${props.value * 100}%,  #B5179E ${props.value * 100}%,#B5179E 0%);`};
+      `linear-gradient( #B5179E 0%, #7209B7 ${props.value * 1.1}%,  #B5179E ${props.value * 1.1}%,#B5179E 0%);`};
 
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
@@ -186,7 +217,9 @@ const InputCurrent = styled.input`
 
   &::-webkit-slider-runnable-track {
     background: ${(props) =>
-      `linear-gradient(to right, #B5179E 0%, #7209B7 ${props.value}%,  #B5179E ${props.value}%,#464646  0%);`};
+      `linear-gradient(to right, #B5179E 0%, #7209B7 ${props.value * 1.1}%,  #B5179E ${
+        props.value * 1.1
+      }%,#464646  0%);`};
 
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
