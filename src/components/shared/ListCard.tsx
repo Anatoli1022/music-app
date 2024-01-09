@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import PlayPause from './PlayPause'
 
-
-
 const ListCard: React.FC<ListCardProps> = ({ item, i, data }) => {
   const { title, images } = item
   const activeSong = useSelector((state: RootState) => state.player.activeSong)
@@ -15,7 +13,7 @@ const ListCard: React.FC<ListCardProps> = ({ item, i, data }) => {
     <Item isActive={activeSong === item && active}>
       <TrackInfoContainer>
         <TrackNumber>{i + 1}</TrackNumber>
-        <TrackImage src={images.coverart} />
+        <TrackImage src={images.coverart} isActive={activeSong === item && active} />
         <TrackTitle>{title}</TrackTitle>
       </TrackInfoContainer>
 
@@ -60,7 +58,8 @@ const TrackNumber = styled.span`
   letter-spacing: 0.54px;
   text-transform: capitalize;
 `
-const TrackImage = styled.img`
+const TrackImage = styled.img<{ isActive: boolean }>`
   border-radius: 50%;
+  border: ${({ isActive }) => (isActive ? '2px solid #B5179E' : 'none')};
   max-width: 58px;
 `
