@@ -11,8 +11,11 @@ const GlobalStyle = createGlobalStyle`
 
 
 
-  p,h1,h2,h3,h4,h5,h6,span,ul,a{
+  p,h1,h2,h3,h4,h5,h6,span,ul,a,button{
     list-style:none;
+    background:none;
+    outline:none;
+    border:none;
     padding:0;
     margin:0;
     text-decoration:none;
