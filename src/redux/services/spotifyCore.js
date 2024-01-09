@@ -14,7 +14,12 @@ export const spotifyCoreApi = createApi({
 
   endpoints: (builder) => ({
     getTopCharts: builder.query({ query: () => 'charts/track' }),
+    getSongsBySearch: builder.query({
+      query: ({ searchTerm, locale, offset }) => {
+        return `search?term=${searchTerm}&locale=${locale}&offset=${offset}`
+      },
+    }),
   }),
 })
 
-export const { useGetTopChartsQuery } = spotifyCoreApi
+export const { useGetTopChartsQuery, useGetSongsBySearchQuery } = spotifyCoreApi
