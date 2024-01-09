@@ -7,6 +7,7 @@ const initialState = {
   isPlaying: false,
   activeSong: null,
   genreListId: '',
+  search: '',
 }
 const playerSlice = createSlice({
   name: 'player',
@@ -28,7 +29,7 @@ const playerSlice = createSlice({
     },
     nextSong: (state, action) => {
       const nextIndex = action.payload
-      const currentTracks = state.currentSongs?.tracks
+      const currentTracks = state.currentSongs
 
       if (currentTracks[nextIndex]) {
         state.activeSong = currentTracks[nextIndex]
@@ -44,9 +45,14 @@ const playerSlice = createSlice({
       state.currentSongs = action.payload
     },
 
+    updateSearch: (state, action) => {
+      state.search = action.payload
+      console.log(state.search)
+    },
+
     prevSong: (state, action) => {
       const nextIndex = action.payload
-      const currentTracks = state.currentSongs?.tracks
+      const currentTracks = state.currentSongs
 
       if (currentTracks[nextIndex]) {
         state.activeSong = currentTracks[nextIndex]
@@ -68,6 +74,6 @@ const playerSlice = createSlice({
   },
 })
 
-export const { setActiveSong, nextSong, prevSong, playPause, selectGenreListId, updateCurrentSongs } =
+export const { setActiveSong, nextSong, prevSong, playPause, selectGenreListId, updateCurrentSongs, updateSearch } =
   playerSlice.actions
 export default playerSlice.reducer
