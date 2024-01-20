@@ -6,6 +6,8 @@ import PlayPause from './PlayPause'
 
 const ListCard: React.FC<ListCardProps> = ({ item, i, data }) => {
   const { title, images } = item
+  const name = () => (item.attributes ? item.attributes.name : null)
+  const image = () => (item.attributes ? item.attributes.artwork.url.replace('{w}', '58').replace('{h}', '58') : null)
   const activeSong = useSelector((state: RootState) => state.player.activeSong)
   const active = useSelector((state: RootState) => state.player.isPlaying)
 
@@ -13,8 +15,8 @@ const ListCard: React.FC<ListCardProps> = ({ item, i, data }) => {
     <Item isActive={activeSong === item && active}>
       <TrackInfoContainer>
         <TrackNumber>{i + 1}</TrackNumber>
-        <TrackImage src={images.coverart} isActive={activeSong === item && active} />
-        <TrackTitle>{title}</TrackTitle>
+        <TrackImage src={item.images ? images.coverart : image()} isActive={activeSong === item && active} />
+        <TrackTitle>{item.title ? title : name()}</TrackTitle>
       </TrackInfoContainer>
 
       <PlayPause activeSong={activeSong} item={item} i={i} data={data} />
