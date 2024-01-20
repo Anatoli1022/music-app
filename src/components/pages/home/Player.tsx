@@ -4,15 +4,20 @@ import styled from 'styled-components'
 import PlayPause from '../../shared/PlayPause'
 import { useDispatch } from 'react-redux'
 import { playPause, nextSong, prevSong } from '../../../redux/features/playerSlice'
+import repeat from '../../../images/repeat.svg'
+import random from '../../../images/random.svg'
+import '../../../types/types'
 
 const Player: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const song = useSelector((state: { player: PlayerSong }) => state.player)
+  const song = useSelector((state: { player: PlayerState }) => state.player)
   const active = useSelector((state: { player: PlayerState }) => state.player.isPlaying)
-  const activeSong = useSelector((state: { player: PlayerSong }) => state.player.activeSong)
+  const activeSong = useSelector((state: { player: PlayerState }) => state.player.activeSong)
   const isMounted = useRef(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [currentVolume, setCurrentVolume] = useState(100)
+  const [isRepeat, setIsRepeat] = useState(false)
+  const [isRandom, setIsRandom] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -32,31 +37,39 @@ const Player: React.FC = () => {
       setCurrentTime(audioRef.current?.currentTime || 0)
     }
 
-    const handleLoadedMetadata = () => {
-      console.log('Длительность аудиофайла:', audioRef.current?.duration, 'секунд')
-    }
-
     const handleEnded = () => {
-      console.log('Песня завершена')
       setCurrentTime(0)
-      dispatch(playPause(false))
-      playNextSong()
+
+      if (isRepeat) {
+        play()
+      } else if (isRandom) {
+        const totalSongs = song.currentSongs.length
+        const randomIndex = Math.floor(Math.random() * totalSongs)
+
+        console.log(randomIndex)
+        pause()
+        dispatch(nextSong(randomIndex))
+        play()
+      } else {
+        dispatch(playPause(false))
+        playNextSong()
+      }
     }
 
     if (audioRef.current) {
       audioRef.current.addEventListener('timeupdate', handleTimeUpdate)
-      audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata)
+
       audioRef.current.addEventListener('ended', handleEnded)
     }
 
     return () => {
       if (audioRef.current) {
         audioRef.current.removeEventListener('timeupdate', handleTimeUpdate)
-        audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata)
+
         audioRef.current.removeEventListener('ended', handleEnded)
       }
     }
-  }, [activeSong])
+  }, [activeSong, isRepeat, isRandom])
 
   const play = () => {
     if (audioRef.current) {
@@ -86,12 +99,20 @@ const Player: React.FC = () => {
     play()
   }
 
+  const toggleRepeat = () => {
+    setIsRepeat(!isRepeat)
+  }
+
+  const playRandomSong = () => {
+    setIsRandom(!isRandom)
+    console.log(isRandom)
+  }
+
   const setVolume = (e) => {
     const newValue = Number(e.target.value)
 
     setCurrentVolume(newValue)
     audioRef.current.volume = newValue
-    console.log(currentVolume)
   }
 
   const handleSeekChange = (e) => {
@@ -106,11 +127,12 @@ const Player: React.FC = () => {
         <Triangle style={{ transform: 'rotate(-90deg)' }} />
       </Button>
       {isMounted.current && <PlayPause />}
-
       <Button onClick={playNextSong}>
         <Triangle style={{ transform: 'rotate(90deg)' }} />
       </Button>
-      {activeSong && <audio ref={audioRef} src={activeSong.hub.actions[1].uri}></audio>}
+      {activeSong && (activeSong.hub.actions[1].uri || activeSong.attributes.previews[0].url) && (
+        <audio ref={audioRef} src={activeSong.hub.actions[1]?.uri || activeSong.attributes.previews[0].url}></audio>
+      )}
       <InputCurrent
         type='range'
         min='0'
@@ -127,6 +149,12 @@ const Player: React.FC = () => {
         value={currentVolume}
         onChange={setVolume}
       />
+      <Button onClick={playRandomSong}>
+        <RandomImage src={random} alt='Random' isRandom={isRandom} />
+      </Button>
+      <Button onClick={toggleRepeat}>
+        <RepeatImage src={repeat} alt='Repeat' isRepeat={isRepeat} />
+      </Button>
     </MainPlayer>
   )
 }
@@ -140,14 +168,34 @@ const MainPlayer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  position: fixed;
 `
 
 const Button = styled.button`
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
   cursor: pointer;
 `
 
+const RandomImage = styled.img<{ isRandom: boolean }>`
+  filter: ${(props) =>
+    props.isRandom
+      ? 'invert(50%) sepia(100%) saturate(5494%) hue-rotate(270deg) brightness(110%) contrast(117%)'
+      : 'none'};
+`
+
+const RepeatImage = styled.img<{ isRepeat: boolean }>`
+  filter: ${(props) =>
+    props.isRepeat
+      ? 'invert(50%) sepia(100%) saturate(5494%) hue-rotate(270deg) brightness(110%) contrast(117%)'
+      : 'none'};
+`
 const Triangle = styled.div`
   width: 0px;
   height: 0px;
