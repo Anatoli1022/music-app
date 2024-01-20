@@ -47,7 +47,6 @@ const playerSlice = createSlice({
 
     updateSearch: (state, action) => {
       state.search = action.payload
-      console.log(state.search)
     },
 
     prevSong: (state, action) => {
