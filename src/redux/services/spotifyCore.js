@@ -14,6 +14,12 @@ export const spotifyCoreApi = createApi({
 
   endpoints: (builder) => ({
     getTopCharts: builder.query({ query: () => 'charts/track' }),
+    getList: builder.query({
+      query: ({ id, locale }) => `shazam-songs/list-similarities?id=${id}&locale=${locale}`,
+    }),
+    getAlbums: builder.query({
+      query: ({ id, locale }) => `albums/get-details?id=${id}&locale=${locale}`,
+    }),
     getSongsBySearch: builder.query({
       query: ({ searchTerm, locale, offset }) => {
         return `search?term=${searchTerm}&locale=${locale}&offset=${offset}`
@@ -22,4 +28,4 @@ export const spotifyCoreApi = createApi({
   }),
 })
 
-export const { useGetTopChartsQuery, useGetSongsBySearchQuery } = spotifyCoreApi
+export const { useGetTopChartsQuery, useGetSongsBySearchQuery, useGetListQuery ,useGetAlbumsQuery} = spotifyCoreApi
