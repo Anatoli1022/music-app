@@ -43,13 +43,7 @@ const Player: React.FC = () => {
       if (isRepeat) {
         play()
       } else if (isRandom) {
-        const totalSongs = song.currentSongs.length
-        const randomIndex = Math.floor(Math.random() * totalSongs)
-
-        console.log(randomIndex)
-        pause()
-        dispatch(nextSong(randomIndex))
-        play()
+        playRandomSong()
       } else {
         dispatch(playPause(false))
         playNextSong()
@@ -83,11 +77,15 @@ const Player: React.FC = () => {
   }
 
   const playNextSong = () => {
-    const newIndex = song.currentIndex + 1
+    if (isRandom) {
+      playRandomSong()
+    } else {
+      const newIndex = song.currentIndex + 1
 
-    pause()
-    dispatch(nextSong(newIndex))
-    play()
+      pause()
+      dispatch(nextSong(newIndex))
+      play()
+    }
   }
 
   const playPrevSong = () => {
@@ -104,6 +102,15 @@ const Player: React.FC = () => {
   }
 
   const playRandomSong = () => {
+    const totalSongs = song.currentSongs.length
+    const randomIndex = Math.floor(Math.random() * totalSongs)
+
+    console.log(randomIndex)
+    pause()
+    dispatch(nextSong(randomIndex))
+    play()
+  }
+  const toggleRandomSong = () => {
     setIsRandom(!isRandom)
     console.log(isRandom)
   }
@@ -130,8 +137,11 @@ const Player: React.FC = () => {
       <Button onClick={playNextSong}>
         <Triangle style={{ transform: 'rotate(90deg)' }} />
       </Button>
-      {activeSong && (activeSong.hub.actions[1].uri || activeSong.attributes.previews[0].url) && (
-        <audio ref={audioRef} src={activeSong.hub.actions[1]?.uri || activeSong.attributes.previews[0].url}></audio>
+      {activeSong && (activeSong?.hub?.actions[1]?.uri || activeSong?.attributes?.previews[0]?.url) && (
+        <audio
+          ref={audioRef}
+          src={activeSong?.hub?.actions[1]?.uri || activeSong?.attributes?.previews[0]?.url}
+        ></audio>
       )}
       <InputCurrent
         type='range'
@@ -139,6 +149,7 @@ const Player: React.FC = () => {
         max={audioRef.current?.duration || 0}
         value={currentTime}
         onChange={handleSeekChange}
+
       />
       <InputVolume
         type='range'
@@ -149,7 +160,7 @@ const Player: React.FC = () => {
         value={currentVolume}
         onChange={setVolume}
       />
-      <Button onClick={playRandomSong}>
+      <Button onClick={toggleRandomSong}>
         <RandomImage src={random} alt='Random' isRandom={isRandom} />
       </Button>
       <Button onClick={toggleRepeat}>
@@ -216,7 +227,7 @@ const Triangle = styled.div`
   }
 `
 
-const InputVolume = styled.input`
+const InputVolume = styled.input<{ value: number }>`
   cursor: pointer;
   border-radius: 20px;
   -webkit-appearance: none;
@@ -244,7 +255,7 @@ const InputVolume = styled.input`
   }
 `
 
-const InputCurrent = styled.input`
+const InputCurrent = styled.input<{ value: number }>`
   cursor: pointer;
   border-radius: 20px;
   -webkit-appearance: none;
