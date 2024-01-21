@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import search from '../../images/search.svg'
+import close from '../../images/close.svg'
 import { useDispatch } from 'react-redux'
 import { updateSearch } from '../../redux/features/playerSlice'
 import { useDebounce } from 'use-debounce'
+
 
 const SearchPanel = () => {
   const dispatch = useDispatch()
@@ -18,11 +20,21 @@ const SearchPanel = () => {
     dispatch(updateSearch(debouncedSearchTerm))
   }, [debouncedSearchTerm, dispatch])
 
+  const handleClick = () => {
+    setSearchTerm('')
+  }
+
   return (
     <SearchWrapper>
       <form autoComplete='off'>
-        <Input type='text' placeholder='Search Music, Artist, Genre' onChange={(e) => handleSubmit(e.target.value)} />
+        <Input
+          type='text'
+          placeholder='Search Music, Artist, Genre'
+          onChange={(e) => handleSubmit(e.target.value)}
+          value={searchTerm}
+        />
         <SearchImage src={search} alt='' loading='eager' aria-hidden='true' />
+        {searchTerm && <CloseImage src={close} alt='' loading='eager' aria-hidden='true' onClick={handleClick} />}
       </form>
     </SearchWrapper>
   )
@@ -60,3 +72,11 @@ const SearchImage = styled.img`
   top: 15px;
   left: 15px;
 `
+
+const CloseImage = styled.img`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+`
+const ButtonClose = styled.button``
