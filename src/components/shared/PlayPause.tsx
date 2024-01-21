@@ -48,8 +48,8 @@ const PlayPause: React.FC<PlayPauseProps> = ({ activeSong, item, i, data }) => {
               y2='-3.91413'
               gradientUnits='userSpaceOnUse'
             >
-              <stop stop-color='#B5179E' />
-              <stop offset='1' stop-color='#7209B7' />
+              <stop stopColor='#B5179E' />
+              <stop offset='1' stopColor='#7209B7' />
             </linearGradient>
             <linearGradient
               id='paint1_linear_9_59'
@@ -59,8 +59,8 @@ const PlayPause: React.FC<PlayPauseProps> = ({ activeSong, item, i, data }) => {
               y2='-3.91413'
               gradientUnits='userSpaceOnUse'
             >
-              <stop stop-color='#B5179E' />
-              <stop offset='1' stop-color='#7209B7' />
+              <stop stopColor='#B5179E' />
+              <stop offset='1' stopColor='#7209B7' />
             </linearGradient>
           </defs>
         </svg>
