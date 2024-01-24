@@ -128,8 +128,13 @@ const Player: React.FC = () => {
     audioRef.current.currentTime = newTime
   }
 
+  const artworkUrl = activeSong?.attributes?.artwork?.url
+  const modifiedUrlImage = artworkUrl.replace('{w}', '269').replace('{h}', '239')
+
   return (
     <MainPlayer>
+      {activeSong && <MusicImage src={activeSong?.images?.coverart || modifiedUrlImage} alt='' />}
+      <SongName>{activeSong?.title || activeSong?.attributes?.name}</SongName>
       <Button onClick={playPrevSong}>
         <Triangle style={{ transform: 'rotate(-90deg)' }} />
       </Button>
@@ -149,7 +154,6 @@ const Player: React.FC = () => {
         max={audioRef.current?.duration || 0}
         value={currentTime}
         onChange={handleSeekChange}
-
       />
       <InputVolume
         type='range'
@@ -174,9 +178,10 @@ export default Player
 
 const MainPlayer = styled.div`
   background: #111;
-  padding-top: 35px;
-  padding-bottom: 35px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   display: flex;
+  column-gap: 20px;
   justify-content: center;
   align-items: center;
   bottom: 0;
@@ -186,11 +191,26 @@ const MainPlayer = styled.div`
   position: fixed;
 `
 
+const MusicImage = styled.img`
+  max-height: 70px;
+  border-radius: 50%;
+  border: 2px solid #b5179e;
+`
+
+const SongName = styled.p`
+  font-size: 18px;
+  color: #b8b8b8;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`
+
 const Button = styled.button`
   padding-left: 5px;
   padding-right: 5px;
-  margin-left: 15px;
-  margin-right: 15px;
+  // margin-left: 15px;
+  // margin-right: 15px;
   cursor: pointer;
 `
 
