@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { playPause, setActiveSong, updateCurrentSongs } from '../../redux/features/playerSlice'
 import styled from 'styled-components'
+import  '../../types/types'
 
 const PlayPause: React.FC<PlayPauseProps> = ({ activeSong, item, i, data }) => {
   const dispatch = useDispatch()
