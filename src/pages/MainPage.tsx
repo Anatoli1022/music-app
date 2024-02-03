@@ -1,22 +1,18 @@
-import { Outlet } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 
-import React from 'react'
-import { Link } from 'react-router-dom'
-import SearchPanel from '../components/pages/home/SearchPanel'
+import SearchPanel from '../components/shared/SearchPanel'
 import GenreList from '../components/pages/home/GenreList'
 import PlayList from '../components/pages/home/PlayList'
 import styled from 'styled-components'
 
-
 const Home = () => {
   return (
     <>
-    <Container>
-      <SearchPanel />
-      <GenreList />
-      <PlayList />
+      <Container>
+        <SearchPanel />
+        <GenreList />
+        <PlayList />
       </Container>
-    
     </>
   )
 }
